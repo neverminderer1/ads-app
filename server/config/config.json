@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "root",
+    "password": "1111",
+    "database": "ads_dev",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": "root",
+    "database": "ads_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "root",
+    "database": "ads",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  }
+}
