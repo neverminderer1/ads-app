@@ -15,7 +15,7 @@ module.exports = {
         },
         price:              Sequelize.FLOAT,
         image:              Sequelize.STRING,
-        user_id:{
+        userId:{
             type:           Sequelize.INTEGER,
             allowNull:      false,
             references: {
@@ -24,6 +24,14 @@ module.exports = {
             },
             onUpdate:       "CASCADE",
             onDelete:       "CASCADE"
+        },
+        createdAt: {
+            allowNull:      false,
+            type:           Sequelize.DATE
+        },
+        updatedAt: {
+            allowNull:      false,
+            type:           Sequelize.DATE
         }
     });
     },

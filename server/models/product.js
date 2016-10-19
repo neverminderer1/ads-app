@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         price:           DataTypes.FLOAT,
         image:           DataTypes.STRING,
-        user_id:         DataTypes.INTEGER,
+        userId:          DataTypes.INTEGER,
         createdAt:       DataTypes.DATE,
         updatedAt:       DataTypes.DATE
     },{
