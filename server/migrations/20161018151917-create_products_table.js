@@ -24,8 +24,7 @@ module.exports = {
             },
             onUpdate:       "CASCADE",
             onDelete:       "CASCADE"
-        },
-        salt:               Sequelize.STRING
+        }
     });
     },
     down: function(queryInterface, Sequelize) {
