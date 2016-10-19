@@ -1,5 +1,7 @@
 'use strict';
 
+var fs              = require('fs');
+var config          = require(process.cwd()+ '/server/config');
 var models          = require( process.cwd()+'/server/models');
 var _               = require('lodash');
 var sanitizeHtml    = require('sanitize-html');
@@ -142,8 +144,59 @@ exports.destroy = function (req, res, next) {
 
 exports.addImage = function (req, res, next) {
 
+    if (req.files.files) {
+        models.product.findOne({
+            include: [{
+                model: models.user,
+                attributes: ['id', 'phone', 'email', 'name']
+            }],
+            where: { id: req.params.id }
+        }).then(function (product) {
+            if (!product) return res.sendStatus(404);
+
+            if (product.image) {
+                fs.unlinkSync(config.assetsDir+'/'+product.image);
+            };
+
+            var file = req.files.files.path.split('/');
+            product.image = file[file.length-1];
+
+            product
+                .save()
+                .then(function (product) {
+                    return res.json(product);
+                }).catch(function (err) {
+                next(err);
+            });
+
+        }).catch(function (err) {
+            next(err);
+        });
+    }
 };
 
 exports.destroyImage = function (req, res, next) {
+
+    models.product.findById(req.params.id)
+        .then(function (product) {
+            if (!product) return res.sendStatus(404);
+
+            if (product.image) {
+                fs.unlinkSync(config.assetsDir+'/'+product.image);
+            };
+
+            product.image = null;
+
+            product
+                .save()
+                .then(function () {
+                    return res.sendStatus(200);
+                }).catch(function (err) {
+                    next(err);
+                });
+
+        }).catch(function (err) {
+            next(err);
+        });
 
 };
