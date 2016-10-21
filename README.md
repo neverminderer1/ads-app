@@ -33,6 +33,8 @@ $ cd server
 $ sequelize db:migrate
 ```
 
+Then create folder "assets" in root directory.
+
 #### Run
 
 * Command "gulp" in the project repository starts the server.

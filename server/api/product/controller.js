@@ -191,7 +191,7 @@ exports.addImage = function (req, res, next) {
             if (product.userId !== req.user.id) {
                 return res.status(403).json({});
             };
-            console.log(product.image)
+
             if (product.image) {
                 fs.unlinkSync(config.assetsDir+'/'+product.image);
             };
