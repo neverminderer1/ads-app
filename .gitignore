@@ -48,4 +48,4 @@ fabric.properties
 node_modules
 .idea
 assets
-private.key
+*.log
