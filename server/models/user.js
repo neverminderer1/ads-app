@@ -13,9 +13,6 @@ module.exports = function(sequelize, DataTypes) {
         password: {
             type: DataTypes.STRING,
             allowNull: true,
-            validate: {
-                notEmpty: { msg: 'Введите пароль' },
-            },
             set: function(password) {
                 this.salt = this.makeSalt();
                 this.setDataValue('password', this.encryptPassword(password));
@@ -24,11 +21,12 @@ module.exports = function(sequelize, DataTypes) {
         salt:            DataTypes.STRING,
         email:           DataTypes.STRING,
         name:            DataTypes.STRING,
-        phone:           DataTypes.STRING,
-        createdAt:       DataTypes.DATE,
-        updatedAt:       DataTypes.DATE
+        phone:           DataTypes.STRING
     },{
         instanceMethods: {
+            authenticate: function(plainText) {
+                return this.encryptPassword(plainText) === this.password;
+            },
             makeSalt: function() {
                 return crypto.randomBytes(16).toString('base64');
             },
@@ -42,7 +40,8 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 User.hasMany(models.product);
             }
-        }
+        },
+        timestamps: false
     });
 
     return User;
