@@ -10,9 +10,19 @@ module.exports = function(sequelize, DataTypes) {
         },
         title: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notEmpty: { msg: "Title field is empty" },
+                len:      { args: [3,16], msg: 'Title must be between 3 and 16 characters in length' }
+            }
         },
-        price:           DataTypes.FLOAT,
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            validate: {
+                notEmpty: { msg: "Price field is empty" }
+            }
+        },
         image:           DataTypes.STRING,
         userId:          DataTypes.INTEGER,
         createdAt:       DataTypes.DATE,

@@ -11,9 +11,12 @@ module.exports = {
         },
         title: {
             type:           Sequelize.STRING,
-        allowNull:      false
+            allowNull:      false
         },
-        price:              Sequelize.FLOAT,
+        price: {
+            type:           Sequelize.FLOAT,
+            allowNull:      false
+        },
         image:              Sequelize.STRING,
         userId:{
             type:           Sequelize.INTEGER,

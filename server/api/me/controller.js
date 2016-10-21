@@ -1,20 +1,23 @@
 'use strict';
 
 var models     = require( process.cwd()+'/server/models');
+var _          = require('lodash');
 
 exports.get = function (req, res, next) {
 
     if (!req.user || !req.user.id) {
-        res.status(404).send("User not found");
+        return res.status(401).json({});
     };
 
     models.user.findOne({
         attributes: ['id', 'phone', 'email', 'name'],
         where: { id: req.user.id }
     }).then(function (user) {
-        if (!user) res.status(404).send("User not found");
+        if (!user) {
+            return res.status(401).json({});
+        }
 
-        res.json(user);
+        return res.json(user);
     }).catch(function (err) {
         next(err);
     });
@@ -27,18 +30,18 @@ exports.update = function (req, res, next) {
     };
 
     if (!req.user || !req.user.id) {
-        res.status(404).send({ message: "User not found" });
+        return res.status(401).json({});
     };
 
-    if (req.body && req.body.new_password && !req.body.current_password) {
-        res.status(422).send({ message: "Current password required" })
+    if (req.body && req.body.new_password && (!req.body.current_password || !req.body.current_password.length)) {
+        return res.status(422).json({ field: "current_password", message: "Current password is empty" });
     };
 
     models.user.findById(req.user.id).then(function (user) {
-        if (!user) res.status(404).send({ message: "User not found" });
+        if (!user) res.status(401).json({});
 
         if (req.body.new_password && !user.authenticate(req.body.current_password)) {
-            res.status(401).send({ message: "Wrong current password" });
+            return res.status(422).json({ field: "current_password", message: "Wrong current password" });
         } else {
             user.password = req.body.new_password;
         }
@@ -53,7 +56,7 @@ exports.update = function (req, res, next) {
                     attributes: ['id', 'phone', 'email', 'name'],
                     where: { id: user.id }
                 }).then(function (user) {
-                    res.json(user);
+                    return res.json(user);
                 }).catch(function (err) {
                     next(err);
                 });

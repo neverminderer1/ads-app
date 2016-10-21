@@ -1,59 +1,43 @@
 'use strict';
 
-var models          = require( process.cwd()+'/server/models');
-var _               = require('lodash');
+var models = require( process.cwd()+'/server/models');
 
 exports.index = function (req, res, next) {
+    var where = {};
 
-    if (!_.isEmpty(req.query)) {
-        var where = {};
+    if (req.query.name) {
+        where.name = req.query.name;
+    };
 
-        if (req.query.name) {
-            where.name = req.query.name;
-        }
+    if (req.query.email) {
+        where.email = req.query.email;
+    };
 
-        if (req.query.email) {
-            where.email = req.query.email;
-        }
-
-        models.user.findAll({
-            attributes: ['id', 'phone', 'email', 'name'],
-            where: where
-        }).then(function (users) {
-
-            if (users) {
-                return res.json(users);
-            }
-
-            return res.json({});
-        }).catch(function (err) {
-            next(err);
-        })
-    } else {
-        next();
-    }
+    models.user.findAll({
+        attributes: ['id', 'phone', 'email', 'name'],
+        where: where
+    }).then(function (users) {
+        return res.json(users);
+    }).catch(function (err) {
+        next(err);
+    });
 
 };
 
 exports.get = function (req, res, next) {
 
-   if (!_.isEmpty(req.params) && req.params.id) {
+   models.user.findOne({
+       attributes: ['id', 'phone', 'email', 'name'],
+       where: { id: req.params.id }
+   }).then(function (user) {
 
-       models.user.findOne({
-           attributes: ['id', 'phone', 'email', 'name'],
-           where: { id: req.params.id }
-       }).then(function (user) {
-
-           if (user) {
-               return res.json(user);
-           }
-
+       if (!users) {
            return res.status(404).json({});
-       }).catch(function (err) {
-           next(err);
-       });
-   } else {
-       next();
-   }
+       };
+
+       return res.json(user);
+   }).catch(function (err) {
+       next(err);
+   });
 
 };

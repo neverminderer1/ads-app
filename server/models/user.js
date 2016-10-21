@@ -12,14 +12,35 @@ module.exports = function(sequelize, DataTypes) {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            validate: {
+                notEmpty: { msg: "Password field is empty" }
+            },
             set: function(password) {
                 this.salt = this.makeSalt();
                 this.setDataValue('password', this.encryptPassword(password));
             }
         },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: {msg: "Email field is empty"},
+                isUnique: function (value, next) {
+                    if (this.id && this.email === value) {
+                        return next();
+                    };
+
+                    User.find({
+                        where: {email: value},
+                        attributes: ['id']
+                    }).then(function (user) {
+                        user ? next({msg: "Email is allready registered"}) : next();
+                    }, next);
+                }
+            }
+        },
         salt:            DataTypes.STRING,
-        email:           DataTypes.STRING,
         name:            DataTypes.STRING,
         phone:           DataTypes.STRING
     },{
