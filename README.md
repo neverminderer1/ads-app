@@ -10,7 +10,7 @@ There is the "Ads-app" installation process which assumes you have a root access
 
 #### Dependencies install
 
-``` npm i -g gulp forever```
+``` npm i -g gulp sequelize-cli forever```
 
 ```
 $ git clone https://github.com/neverminderer1/ads-app.git
